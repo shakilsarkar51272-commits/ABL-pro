@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ABL pro</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f5f8;color:#17252b;font-family:Arial,"Noto Sans Bengali",sans-serif}
+header{background:linear-gradient(135deg,#123d35,#16745b);color:white;padding:24px 17px 28px;border-radius:0 0 25px 25px;text-align:center}
+.logo{width:76px;height:76px;border-radius:18px;background:#fff;object-fit:contain;padding:5px}
+.profile{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;margin-top:12px}
+h1{font-size:25px;margin:12px 0 5px}
+.subtitle{font-size:14px;color:#d9eee6}
+.created{font-size:12px;margin-top:12px;color:#d9eee6}
+.search-area{margin:-15px 15px 18px;background:linear-gradient(120deg,#f3b33d,#f58b42);padding:15px;border-radius:15px;box-shadow:0 5px 15px #0002}
+.search-area input{width:100%;padding:14px;border:0;border-radius:10px;font-size:15px;outline:none}
+.container{padding:0 15px 30px;max-width:700px;margin:auto}
+.count{background:white;padding:17px;border-radius:14px;box-shadow:0 3px 12px #0000000c;margin-bottom:16px}
+.count small{color:#667}
+.count strong{display:block;font-size:29px;color:#145c49;margin-top:5px}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
+.menu button{border:0;border-radius:15px;padding:20px 10px;font-size:18px;font-weight:bold;cursor:pointer}
+.bread{background:#e3efff;color:#24558d}
+.biscuit{background:#fff0df;color:#98521c}
+.section{background:white;border-radius:15px;padding:16px;margin:14px 0;box-shadow:0 3px 12px #0000000b}
+.section h2{font-size:19px;margin:0 0 12px}
+input,select,textarea{font:inherit}
+.field{width:100%;padding:12px;border:1px solid #dce3e5;border-radius:9px;margin:6px 0 11px;background:white}
+.primary{width:100%;padding:13px;border:0;border-radius:10px;background:#17654f;color:white;font-weight:bold;font-size:15px;cursor:pointer}
+.secondary{padding:10px 14px;border:0;border-radius:9px;background:#e8f2ee;color:#17654f;font-weight:bold}
+.dealer{padding:13px;border:1px solid #e8eeee;border-radius:11px;margin:9px 0;cursor:pointer}
+.dealer strong{display:block;font-size:16px}
+.dealer small{color:#667}
+.hidden{display:none}
+.tag{font-size:11px;padding:4px 8px;border-radius:20px;background:#e6f2ed;color:#17654f}
+.notice{background:#fff8e8;padding:12px;border-radius:10px;margin:8px 0}
+footer{text-align:center;padding:20px;color:#778;font-size:12px}
+#message{font-size:13px;margin-top:10px}
+</style>
+</head>
+<body>
+
+<header>
+  <!-- এখানে পরে আপনার ABL pro লোগোর ছবি বসবে -->
+  <img class="logo" src="logo.png" alt="ABL pro logo"
+       onerror="this.style.display='none'">
+  <h1>Welcome to ABL pro</h1>
+  <div class="subtitle">Akij bekars bread &amp; biscuit points</div>
+  <div class="created">Created by Shakil Ahmed</div>
+  <!-- এখানে পরে আপনার প্রোফাইল ছবি বসবে -->
+  <img class="profile" src="profile.jpg" alt="Shakil Ahmed"
+       onerror="this.style.display='none'">
+</header>
+
+<div class="search-area">
+  <input id="search" placeholder="ডিলারের নাম বা মোবাইল নম্বর দিয়ে খুঁজুন..." oninput="renderDealers()">
+</div>
+
+<main class="container">
+
+  <div class="count">
+    <small>মোট ডিলার পয়েন্ট</small>
+    <strong id="totalCount">০</strong>
+  </div>
+
+  <div class="menu">
+    <button class="bread" onclick="showCategory('Bread')">🍞 Bread</button>
+    <button class="biscuit" onclick="showCategory('Biscuit')">🍪 Biscuit</button>
+  </div>
+
+  <section class="section">
+    <h2 id="dealerTitle">সকল ডিলার পয়েন্ট</h2>
+    <div id="dealerList">ডিলারের তথ্য লোড হচ্ছে...</div>
+  </section>
+
+  <section class="section" id="detailSection" hidden>
+    <h2>ডিলারের বিস্তারিত তথ্য</h2>
+    <div id="dealerDetail"></div>
+  </section>
+
+  <section class="section">
+    <h2>➕ নতুন ডিলার পয়েন্ট যোগ করুন</h2>
+    <form id="dealerForm">
+      <label>ডিলারের নাম</label>
+      <input class="field" name="dealer_name" required placeholder="ডিলারের নাম">
+
+      <label>মোবাইল নম্বর</label>
+      <input class="field" name="phone" required placeholder="মোবাইল নম্বর">
+
+      <label>বিভাগ</label>
+      <select class="field" name="category" required>
+        <option value="">নির্বাচন করুন</option>
+        <option value="Bread">Bread</option>
+        <option value="Biscuit">Biscuit</option>
+      </select>
+
+      <label>জেলা</label>
+      <input class="field" name="district" placeholder="জেলার নাম">
+
+      <label>এলাকা</label>
+      <input class="field" name="area" placeholder="এলাকার নাম">
+
+      <label>সম্পূর্ণ ঠিকানা</label>
+      <textarea class="field" name="address" rows="2" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+
+      <label>Google Maps লিংক</label>
+      <input class="field" name="map_url" placeholder="Maps link">
+
+      <label>ডিলার পয়েন্টের একাধিক ছবি</label>
+      <input class="field" type="file" id="photos" accept="image/*" multiple>
+
+      <button class="primary" type="submit">ডিলার পয়েন্ট জমা দিন</button>
+      <div id="message"></div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2>📞 TSM Sir Number</h2>
+    <div id="tsmList">TSM তথ্য লোড হচ্ছে...</div>
+  </section>
+
+  <section class="section">
+    <h2>📢 Notice Board</h2>
+    <div id="noticeList">নোটিশ লোড হচ্ছে...</div>
+  </section>
+
+  <footer>ABL pro · Created by Shakil Ahmed</footer>
+</main>
+
+<script>
+const SUPABASE_URL = "এখানে_আপনার_SUPABASE_PROJECT_URL";
+const SUPABASE_KEY = "এখানে_আপনার_SUPABASE_ANON_KEY";
+
+let db = null;
+let allDealers = [];
+let selectedCategory = "";
+
+function bnNumber(number){
+  return String(number).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+}
+
+function escapeHTML(value){
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
+}
+
+function init(){
+  if(!window.supabase || SUPABASE_URL.includes("এখানে_")){
+    document.getElementById("dealerList").innerHTML =
+      "ডেটাবেজ সংযোগ এখনো সেট করা হয়নি।";
+    document.getElementById("tsmList").innerHTML = "ডেটাবেজ সংযোগ অপেক্ষমাণ।";
+    document.getElementById("noticeList").innerHTML = "ডেটাবেজ সংযোগ অপেক্ষমাণ।";
+    return;
+  }
+  db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  loadDealers();
+  loadTSM();
+  loadNotices();
+}
+
+async function loadDealers(){
+  const {data,error}=await db.from("dealer_points")
+    .select("*").order("dealer_name");
+  if(error){
+    document.getElementById("dealerList").textContent="ডিলার লোড করা যায়নি।";
+    return;
+  }
+  allDealers=data||[];
+  document.getElementById("totalCount").textContent=bnNumber(allDealers.length);
+  renderDealers();
+}
+
+function showCategory(category){
+  selectedCategory=selectedCategory===category?"":category;
+  document.getElementById("dealerTitle").textContent=
+    selectedCategory?selectedCategory+" ডিলার পয়েন্ট":"সকল ডিলার পয়েন্ট";
+  renderDealers();
+}
+
+function renderDealers(){
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  const list=allDealers.filter(d=>{
+    const matchesCategory=!selectedCategory||d.category===selectedCategory;
+    const matchesSearch=(d.dealer_name+" "+d.phone).toLowerCase().includes(q);
+    return matchesCategory&&matchesSearch;
+  });
+  const el=document.getElementById("dealerList");
+  if(!list.length){el.textContent="কোনো ডিলার পাওয়া যায়নি।";return;}
+  el.innerHTML=list.map(d=>`
+    <div class="dealer" onclick="showDetail(${d.id})">
+      <strong>${escapeHTML(d.dealer_name)}</strong>
+      <small>${escapeHTML(d.phone)} · ${escapeHTML(d.category)}</small>
+    </div>`).join("");
+}
+
+async function showDetail(id){
+  const d=allDealers.find(x=>x.id===id);
+  if(!d)return;
+  const {data:photos}=await db.from("dealer_images")
+    .select("image_url").eq("dealer_id",id);
+  const images=(photos||[]).map(p=>`
+    <img src="${escapeHTML(p.image_url)}"
+    style="width:100%;max-width:180px;border-radius:10px;margin:5px"
+    alt="ডিলার পয়েন্ট">`).join("");
+  document.getElementById("dealerDetail").innerHTML=`
+    <h3>${escapeHTML(d.dealer_name)}</h3>
+    <p>মোবাইল: <a href="tel:${escapeHTML(d.phone)}">${escapeHTML(d.phone)}</a></p>
+    <p>বিভাগ: ${escapeHTML(d.category)}</p>
+    <p>জেলা: ${escapeHTML(d.district)}</p>
+    <p>এলাকা: ${escapeHTML(d.area)}</p>
+    <p>ঠিকানা: ${escapeHTML(d.address)}</p>
+    ${d.map_url?`<p><a href="${escapeHTML(d.map_url)}" target="_blank" rel="noopener">Google Maps-এ দেখুন</a></p>`:""}
+    <div>${images}</div>`;
+  const box=document.getElementById("detailSection");
+  box.hidden=false;
+  box.scrollIntoView({behavior:"smooth"});
+}
+
+document.getElementById("dealerForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  if(!db){alert("আগে Supabase সংযোগ সেট করতে হবে।");return;}
+  const form=e.target;
+  const f=new FormData(form);
+  const message=document.getElementById("message");
+  message.textContent="তথ্য জমা হচ্ছে...";
+  const record={
+    dealer_name:f.get("dealer_name").trim(),
+    phone:f.get("phone").trim(),
+    category:f.get("category"),
+    district:f.get("district").trim(),
+    area:f.get("area").trim(),
+    address:f.get("address").trim(),
+    map_url:f.get("map_url").trim()
+  };
+  const {data,error}=await db.from("dealer_points").insert(record).select().single();
+  if(error){message.textContent="তথ্য জমা হয়নি: "+error.message;return;}
+
+  const files=document.getElementById("photos").files;
+  for(const file of files){
+    const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const path=data.id+"/"+Date.now()+"_"+safeName;
+    const {error:uploadError}=await db.storage.from("dealer-photos").upload(path,file);
+    if(uploadError){message.textContent="ডিলার যোগ হয়েছে, তবে একটি ছবি আপলোড হয়নি: "+uploadError.message;continue;}
+    const {data:urlData}=db.storage.from("dealer-photos").getPublicUrl(path);
+    await db.from("dealer_images").insert({
+      dealer_id:data.id,image_url:urlData.publicUrl
+    });
+  }
+  message.textContent="ডিলার পয়েন্ট সফলভাবে যোগ হয়েছে!";
+  form.reset();
+  await loadDealers();
+});
+
+async function loadTSM(){
+  if(!db)return;
+  const {data,error}=await db.from("tsm_contacts").select("*").order("tsm_name");
+  const el=document.getElementById("tsmList");
+  if(error){el.textContent="TSM তথ্য লোড করা যায়নি।";return;}
+  el.innerHTML=data.length?data.map(t=>`
+    <div class="dealer">
+      <strong>${escapeHTML(t.tsm_name)}</strong>
+      <small>${escapeHTML(t.phone)} · ${escapeHTML(t.district)} · ${escapeHTML(t.area)}</small>
+      <p><a href="tel:${escapeHTML(t.phone)}">📞 কল করুন</a></p>
+    </div>`).join(""):"এখনো TSM তথ্য যোগ করা হয়নি।";
+}
+
+async function loadNotices(){
+  if(!db)return;
+  const {data,error}=await db.from("notices").select("*").order("created_at",{ascending:false});
+  const el=document.getElementById("noticeList");
+  if(error){el.textContent="নোটিশ লোড করা যায়নি।";return;}
+  el.innerHTML=data.length?data.map(n=>`
+    <div class="notice"><strong>${escapeHTML(n.title)}</strong>
+    <p>${escapeHTML(n.description)}</p></div>`).join(""):"এখনো কোনো নোটিশ নেই।";
+}
+
+init();
+</script>
+</body>
+</html>
