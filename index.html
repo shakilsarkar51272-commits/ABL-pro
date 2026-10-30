@@ -261,29 +261,6 @@ footer {
   <input id="search" placeholder="ডিলারের নাম বা মোবাইল নম্বর দিয়ে খুঁজুন..." oninput="renderDealers()">
 </div>
 <main class="container">
-  <section class="section">
-  <h2>📞 TSM স্যারের তথ্য যোগ করুন</h2>
-
-  <form id="tsmForm">
-    <label>TSM স্যারের নাম</label>
-    <input class="field" name="tsm_name" required placeholder="নাম লিখুন">
-
-    <label>মোবাইল নম্বর</label>
-    <input class="field" name="phone" required placeholder="মোবাইল নম্বর">
-
-    <label>জেলা</label>
-    <input class="field" name="district" placeholder="জেলার নাম">
-
-    <label>এলাকা</label>
-    <input class="field" name="area" placeholder="এলাকার নাম">
-
-    <label>সম্পূর্ণ ঠিকানা</label>
-    <textarea class="field" name="address" rows="2" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
-
-    <button class="primary" type="submit">TSM তথ্য জমা দিন</button>
-    <div id="tsmMessage"></div>
-  </form>
-  </section>
 
   <div class="count">
     <small>মোট ডিলার পয়েন্ট</small>
@@ -397,6 +374,38 @@ footer {
   <h2>📝 ডিলার ম্যানেজমেন্ট</h2>
   <div id="adminDealerList">ডিলারের তালিকা লোড হচ্ছে...</div>
   </section>
+  <section class="section">
+  <details ontoggle="if(this.open) renderTsmList()">
+    <summary>📞 TSM স্যারের তালিকা</summary>
+    <div id="tsmList">TSM-এর তথ্য লোড হচ্ছে...</div>
+  </details>
+</section>
+
+<section class="section">
+  <details>
+    <summary>➕ নতুন TSM তথ্য যোগ করুন</summary>
+
+    <form id="tsmForm">
+      <label>TSM স্যারের নাম</label>
+      <input class="field" name="tsm_name" required placeholder="নাম লিখুন">
+
+      <label>মোবাইল নম্বর</label>
+      <input class="field" name="phone" required placeholder="মোবাইল নম্বর">
+
+      <label>জেলা</label>
+      <input class="field" name="district" placeholder="জেলার নাম">
+
+      <label>এলাকা</label>
+      <input class="field" name="area" placeholder="এলাকার নাম">
+
+      <label>সম্পূর্ণ ঠিকানা</label>
+      <textarea class="field" name="address" rows="2" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+
+      <button class="primary" type="submit">TSM তথ্য জমা দিন</button>
+      <div id="tsmMessage"></div>
+    </form>
+  </details>
+</section>
 </main>
 
 <script>
@@ -711,6 +720,32 @@ showDashboard();
     this.reset();
   }
 });
+  async function renderTsmList(){
+  const list=document.getElementById("tsmList");
+  list.textContent="TSM-এর তথ্য লোড হচ্ছে...";
+
+  const {data,error}=await db
+    .from("tsm_contacts")
+    .select("*")
+    .order("id",{ascending:false});
+
+  if(error){
+    list.textContent="তথ্য লোড করা যায়নি।";
+    return;
+  }
+
+  list.innerHTML="";
+
+  data.forEach(tsm=>{
+    const item=document.createElement("div");
+    item.className="dealer";
+    item.innerHTML="<strong>"+tsm.tsm_name+"</strong><br>"+tsm.phone+
+      "<br>জেলা: "+(tsm.district||"")+
+      "<br>এলাকা: "+(tsm.area||"")+
+      "<br>ঠিকানা: "+(tsm.address||"");
+    list.appendChild(item);
+  });
+  }
 init();
 </script>
 </body>
