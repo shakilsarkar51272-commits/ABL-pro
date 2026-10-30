@@ -8,40 +8,230 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ABL pro</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#f2f5f8;color:#17252b;font-family:Arial,"Noto Sans Bengali",sans-serif}
-header{background:linear-gradient(135deg,#123d35,#16745b);color:white;padding:24px 17px 28px;border-radius:0 0 25px 25px;text-align:center}
-.logo{width:76px;height:76px;border-radius:18px;background:#fff;object-fit:contain;padding:5px}
-.profile{width:65px;height:65px;border-radius:50%;object-fit:cover;border:3px solid white;margin-top:12px}
-h1{font-size:25px;margin:12px 0 5px}
-.subtitle{font-size:14px;color:#d9eee6}
-.created{font-size:12px;margin-top:12px;color:#d9eee6}
-.search-area{margin:-15px 15px 18px;background:linear-gradient(120deg,#f3b33d,#f58b42);padding:15px;border-radius:15px;box-shadow:0 5px 15px #0002}
-.search-area input{width:100%;padding:14px;border:0;border-radius:10px;font-size:15px;outline:none}
-.container{padding:0 15px 30px;max-width:700px;margin:auto}
-.count{background:white;padding:17px;border-radius:14px;box-shadow:0 3px 12px #0000000c;margin-bottom:16px}
-.count small{color:#667}
-.count strong{display:block;font-size:29px;color:#145c49;margin-top:5px}
-.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:20px}
-.menu button{border:0;border-radius:15px;padding:20px 10px;font-size:18px;font-weight:bold;cursor:pointer}
-.bread{background:#e3efff;color:#24558d}
-.biscuit{background:#fff0df;color:#98521c}
-.section{background:white;border-radius:15px;padding:16px;margin:14px 0;box-shadow:0 3px 12px #0000000b}
-.section h2{font-size:19px;margin:0 0 12px}
-input,select,textarea{font:inherit}
-.field{width:100%;padding:12px;border:1px solid #dce3e5;border-radius:9px;margin:6px 0 11px;background:white}
-.primary{width:100%;padding:13px;border:0;border-radius:10px;background:#17654f;color:white;font-weight:bold;font-size:15px;cursor:pointer}
-.secondary{padding:10px 14px;border:0;border-radius:9px;background:#e8f2ee;color:#17654f;font-weight:bold}
-.dealer{padding:13px;border:1px solid #e8eeee;border-radius:11px;margin:9px 0;cursor:pointer}
-.dealer strong{display:block;font-size:16px}
-.dealer small{color:#667}
-.hidden{display:none}
-.tag{font-size:11px;padding:4px 8px;border-radius:20px;background:#e6f2ed;color:#17654f}
-.notice{background:#fff8e8;padding:12px;border-radius:10px;margin:8px 0}
-footer{text-align:center;padding:20px;color:#778;font-size:12px}
-#message{font-size:13px;margin-top:10px}
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #f3f6f9;
+  color: #192b32;
+  font-family: Arial, "Noto Sans Bengali", sans-serif;
+}
+
+header {
+  background: linear-gradient(135deg, #103d34, #168568);
+  color: white;
+  padding: 28px 18px 35px;
+  border-radius: 0 0 28px 28px;
+  text-align: center;
+  box-shadow: 0 5px 18px #123d3525;
+}
+
+h1 {
+  font-size: 26px;
+  margin: 10px 0 7px;
+  font-weight: 800;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #d8f3e8;
+}
+
+.created {
+  font-size: 12px;
+  margin-top: 13px;
+  color: #d8f3e8;
+}
+
+.search-area {
+  margin: -20px 15px 20px;
+  background: white;
+  padding: 12px;
+  border-radius: 17px;
+  box-shadow: 0 6px 22px #102e2420;
+}
+
+.search-area input {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 12px;
+  background: #f3f7f6;
+  font-size: 15px;
+  outline: none;
+}
+
+.container {
+  padding: 0 15px 35px;
+  max-width: 700px;
+  margin: auto;
+}
+
+.count {
+  background: linear-gradient(120deg, #ffffff, #e9f7f1);
+  padding: 19px;
+  border-radius: 18px;
+  box-shadow: 0 4px 15px #0000000b;
+  margin-bottom: 18px;
+}
+
+.count small {
+  color: #657873;
+}
+
+.count strong {
+  display: block;
+  font-size: 32px;
+  color: #12694f;
+  margin-top: 6px;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+  margin-bottom: 20px;
+}
+
+.menu button {
+  border: 0;
+  border-radius: 18px;
+  padding: 22px 10px;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #0000000b;
+  transition: 0.2s;
+}
+
+.menu button:active {
+  transform: scale(0.97);
+}
+
+.bread {
+  background: linear-gradient(135deg, #e5f0ff, #cfe2ff);
+  color: #20558d;
+}
+
+.biscuit {
+  background: linear-gradient(135deg, #fff1df, #ffdfbd);
+  color: #96501c;
+}
+
+.section {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  margin: 15px 0;
+  box-shadow: 0 4px 16px #0000000b;
+}
+
+.section h2 {
+  font-size: 19px;
+  margin: 0 0 15px;
+  color: #173d32;
+}
+
+input, select, textarea {
+  font: inherit;
+}
+
+.field {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #dce7e2;
+  border-radius: 11px;
+  margin: 7px 0 13px;
+  background: #fbfdfc;
+  outline: none;
+}
+
+.field:focus {
+  border-color: #168568;
+  box-shadow: 0 0 0 3px #16856818;
+}
+
+.primary {
+  width: 100%;
+  padding: 15px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #12694f, #168568);
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.secondary {
+  padding: 11px 15px;
+  border: 0;
+  border-radius: 11px;
+  background: #e8f5ef;
+  color: #17654f;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.dealer {
+  padding: 16px;
+  background: #fbfdfc;
+  border: 1px solid #e5eeea;
+  border-radius: 14px;
+  margin: 11px 0;
+  cursor: pointer;
+  box-shadow: 0 2px 8px #00000008;
+}
+
+.dealer strong {
+  display: block;
+  font-size: 16px;
+  color: #183e32;
+  margin-bottom: 6px;
+}
+
+.dealer small {
+  color: #687a74;
+  font-size: 13px;
+}
+
+.hidden {
+  display: none;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 20px;
+  background: #e6f2ed;
+  color: #17654f;
+}
+
+.notice {
+  background: #fff8e8;
+  padding: 14px;
+  border-radius: 12px;
+  margin: 9px 0;
+  border-left: 4px solid #f1b74c;
+}
+
+footer {
+  text-align: center;
+  padding: 22px;
+  color: #778780;
+  font-size: 12px;
+}
+
+#message {
+  font-size: 13px;
+  margin-top: 10px;
+}
 </style>
+
 </head>
 <body>
 
