@@ -329,7 +329,20 @@ footer {
     <h2>📢 Notice Board</h2>
     <div id="noticeList">নোটিশ লোড হচ্ছে...</div>
   </section>
+ <section class="section hidden" id="noticeAdminForm">
+  <h2>➕ নতুন নোটিশ প্রকাশ করুন</h2>
 
+  <form id="noticeForm">
+    <label>নোটিশের শিরোনাম</label>
+    <input class="field" name="title" required placeholder="শিরোনাম লিখুন">
+
+    <label>নোটিশের বিস্তারিত</label>
+    <textarea class="field" name="description" rows="4" required placeholder="নোটিশ লিখুন"></textarea>
+
+    <button class="primary" type="submit">নোটিশ প্রকাশ করুন</button>
+    <div id="noticeMessage"></div>
+  </form>
+ </section>
   <footer>ABL pro · Created by Shakil Ahmed</footer>
   <section class="section hidden" id="adminPanel">
   <h2>🔐 Admin Login</h2>
