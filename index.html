@@ -386,7 +386,7 @@ function showCategory(category){
 }
 
 function renderDealers(){
-  const q=document.getElementById("dealerSearch").value.trim().toLowerCase();
+  const q=document.getElementById("search").value.trim().toLowerCase();
 
   const list=allDealers.filter(d=>{
     const matchesCategory=!selectedCategory||d.category===selectedCategory;
