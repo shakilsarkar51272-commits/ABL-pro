@@ -344,6 +344,29 @@ footer {
 
   <div id="adminMessage"></div>
   </section>
+  <section class="section hidden" id="adminDashboard">
+  <h2>📊 Admin Dashboard</h2>
+
+  <div class="count">
+    <small>মোট ডিলার পয়েন্ট</small>
+    <strong id="adminTotal">০</strong>
+  </div>
+
+  <div class="count">
+    <small>🍞 ব্রেড পয়েন্ট</small>
+    <strong id="adminBread">০</strong>
+  </div>
+
+  <div class="count">
+    <small>🍪 বিস্কুট পয়েন্ট</small>
+    <strong id="adminBiscuit">০</strong>
+  </div>
+
+  <div class="count">
+    <small>📞 মোট TSM</small>
+    <strong id="adminTsm">০</strong>
+  </div>
+  </section>
 </main>
 
 <script>
@@ -530,9 +553,24 @@ function showAdmin(){
     msg.textContent="আপনার Admin অনুমতি নেই।";
     return;
   }
-
+showDashboard();
   msg.textContent="Admin লগইন সফল!";
   }
+  async function showDashboard(){
+  document.getElementById("adminPanel").classList.add("hidden");
+  document.getElementById("adminDashboard").classList.remove("hidden");
+  document.getElementById("adminDashboard").scrollIntoView({behavior:"smooth"});
+
+  const {count:total}=await db.from("dealer_points").select("*",{count:"exact",head:true});
+  const {count:bread}=await db.from("dealer_points").select("*",{count:"exact",head:true}).eq("category","Bread");
+  const {count:biscuit}=await db.from("dealer_points").select("*",{count:"exact",head:true}).eq("category","Biscuit");
+  const {count:tsm}=await db.from("tsm_contacts").select("*",{count:"exact",head:true});
+
+  document.getElementById("adminTotal").textContent=total ?? 0;
+  document.getElementById("adminBread").textContent=bread ?? 0;
+  document.getElementById("adminBiscuit").textContent=biscuit ?? 0;
+  document.getElementById("adminTsm").textContent=tsm ?? 0;
+}
 init();
 </script>
 </body>
