@@ -261,6 +261,29 @@ footer {
   <input id="search" placeholder="ডিলারের নাম বা মোবাইল নম্বর দিয়ে খুঁজুন..." oninput="renderDealers()">
 </div>
 <main class="container">
+  <section class="section">
+  <h2>📞 TSM স্যারের তথ্য যোগ করুন</h2>
+
+  <form id="tsmForm">
+    <label>TSM স্যারের নাম</label>
+    <input class="field" name="tsm_name" required placeholder="নাম লিখুন">
+
+    <label>মোবাইল নম্বর</label>
+    <input class="field" name="phone" required placeholder="মোবাইল নম্বর">
+
+    <label>জেলা</label>
+    <input class="field" name="district" placeholder="জেলার নাম">
+
+    <label>এলাকা</label>
+    <input class="field" name="area" placeholder="এলাকার নাম">
+
+    <label>সম্পূর্ণ ঠিকানা</label>
+    <textarea class="field" name="address" rows="2" placeholder="সম্পূর্ণ ঠিকানা"></textarea>
+
+    <button class="primary" type="submit">TSM তথ্য জমা দিন</button>
+    <div id="tsmMessage"></div>
+  </form>
+  </section>
 
   <div class="count">
     <small>মোট ডিলার পয়েন্ট</small>
@@ -665,6 +688,29 @@ showDashboard();
     list.appendChild(item);
   });
 }
+  document.getElementById("tsmForm").addEventListener("submit",async function(e){
+  e.preventDefault();
+
+  const form=new FormData(this);
+  const tsm={
+    tsm_name:form.get("tsm_name"),
+    phone:form.get("phone"),
+    district:form.get("district"),
+    area:form.get("area"),
+    address:form.get("address")
+  };
+
+  const msg=document.getElementById("tsmMessage");
+
+  const {error}=await db.from("tsm_contacts").insert([tsm]);
+
+  if(error){
+    msg.textContent="তথ্য জমা হয়নি। আবার চেষ্টা করুন।";
+  }else{
+    msg.textContent="TSM-এর তথ্য সফলভাবে জমা হয়েছে।";
+    this.reset();
+  }
+});
 init();
 </script>
 </body>
