@@ -346,6 +346,9 @@ footer {
   </section>
   <section class="section hidden" id="adminDashboard">
   <h2>📊 Admin Dashboard</h2>
+    <button class="primary" onclick="showDealerManager()">
+  📝 ডিলার ম্যানেজমেন্ট
+    </button>
 
   <div class="count">
     <small>মোট ডিলার পয়েন্ট</small>
@@ -366,6 +369,10 @@ footer {
     <small>📞 মোট TSM</small>
     <strong id="adminTsm">০</strong>
   </div>
+  </section>
+  <section class="section hidden" id="dealerManager">
+  <h2>📝 ডিলার ম্যানেজমেন্ট</h2>
+  <div id="adminDealerList">ডিলারের তালিকা লোড হচ্ছে...</div>
   </section>
 </main>
 
@@ -571,6 +578,42 @@ showDashboard();
   document.getElementById("adminBiscuit").textContent=biscuit ?? 0;
   document.getElementById("adminTsm").textContent=tsm ?? 0;
 }
+  function showDealerManager(){
+  document.getElementById("adminDashboard").classList.add("hidden");
+  document.getElementById("dealerManager").classList.remove("hidden");
+  document.getElementById("dealerManager").scrollIntoView({behavior:"smooth"});
+  renderAdminDealers();
+  }
+  async function renderAdminDealers(){
+  const list=document.getElementById("adminDealerList");
+  list.textContent="ডিলারের তালিকা লোড হচ্ছে...";
+
+  const {data,error}=await db
+    .from("dealer_points")
+    .select("id,dealer_name,phone,category")
+    .order("id",{ascending:false});
+
+  if(error){
+    list.textContent="ডিলারের তালিকা লোড করা যায়নি।";
+    return;
+  }
+
+  list.innerHTML="";
+
+  data.forEach(dealer=>{
+    const item=document.createElement("div");
+    item.className="dealer";
+
+    const name=document.createElement("strong");
+    name.textContent=dealer.dealer_name;
+
+    const phone=document.createElement("small");
+    phone.textContent=dealer.phone+" | "+(dealer.category==="Bread"?"ব্রেড পয়েন্ট":"বিস্কুট পয়েন্ট");
+
+    item.append(name,phone);
+    list.appendChild(item);
+  });
+    }
 init();
 </script>
 </body>
