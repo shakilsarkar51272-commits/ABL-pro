@@ -590,7 +590,7 @@ showDashboard();
 
   const {data,error}=await db
     .from("dealer_points")
-    .select("id,dealer_name,phone,category")
+    .select("*")
     .order("id",{ascending:false});
 
   if(error){
@@ -608,12 +608,63 @@ showDashboard();
     name.textContent=dealer.dealer_name;
 
     const phone=document.createElement("small");
-    phone.textContent=dealer.phone+" | "+(dealer.category==="Bread"?"ব্রেড পয়েন্ট":"বিস্কুট পয়েন্ট");
+    phone.textContent=dealer.phone;
 
-    item.append(name,phone);
+    const edit=document.createElement("button");
+    edit.className="secondary";
+    edit.textContent="✏️ এডিট";
+    edit.onclick=async()=>{
+      const dealer_name=prompt("ডিলারের নাম:",dealer.dealer_name);
+      if(dealer_name===null)return;
+
+      const phone=prompt("মোবাইল নম্বর:",dealer.phone);
+      if(phone===null)return;
+
+      const district=prompt("জেলা:",dealer.district||"");
+      if(district===null)return;
+
+      const area=prompt("এলাকা:",dealer.area||"");
+      if(area===null)return;
+
+      const address=prompt("সম্পূর্ণ ঠিকানা:",dealer.address||"");
+      if(address===null)return;
+
+      const map_url=prompt("Google Maps লিংক:",dealer.map_url||"");
+      if(map_url===null)return;
+
+      const {error}=await db.from("dealer_points")
+        .update({dealer_name,phone,district,area,address,map_url})
+        .eq("id",dealer.id);
+
+      if(error){
+        alert("তথ্য পরিবর্তন করা যায়নি।");
+      }else{
+        alert("ডিলারের তথ্য আপডেট হয়েছে।");
+        renderAdminDealers();
+      }
+    };
+
+    const del=document.createElement("button");
+    del.className="secondary";
+    del.textContent="🗑️ ডিলিট";
+    del.onclick=async()=>{
+      if(!confirm("আপনি কি এই ডিলার পয়েন্ট মুছে ফেলতে চান?"))return;
+
+      const {error}=await db.from("dealer_points")
+        .delete().eq("id",dealer.id);
+
+      if(error){
+        alert("ডিলার মুছে ফেলা যায়নি।");
+      }else{
+        alert("ডিলার পয়েন্ট মুছে ফেলা হয়েছে।");
+        renderAdminDealers();
+      }
+    };
+
+    item.append(name,phone,document.createElement("br"),edit,del);
     list.appendChild(item);
   });
-    }
+}
 init();
 </script>
 </body>
