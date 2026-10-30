@@ -523,7 +523,7 @@ function showAdmin(){
     return;
   }
 
-  const {data,isAdminError}=await db.rpc("is_admin");
+  const {data,error:isAdminError}=await db.rpc("is_admin");
 
   if(isAdminError || data!==true){
     await db.auth.signOut();
