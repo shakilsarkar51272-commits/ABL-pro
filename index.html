@@ -567,13 +567,91 @@ async function loadTSM(){
 
 async function loadNotices(){
   if(!db)return;
-  const {data,error}=await db.from("notices").select("*").order("created_at",{ascending:false});
+
   const el=document.getElementById("noticeList");
-  if(error){el.textContent="নোটিশ লোড করা যায়নি।";return;}
-  el.innerHTML=data.length?data.map(n=>`
-    <div class="notice"><strong>${escapeHTML(n.title)}</strong>
-    <p>${escapeHTML(n.description)}</p></div>`).join(""):"এখনো কোনো নোটিশ নেই।";
-}
+  el.textContent="নোটিশ লোড হচ্ছে...";
+
+  const {data,error}=await db
+    .from("notices")
+    .select("*")
+    .order("created_at",{ascending:false});
+
+  if(error){
+    el.textContent="নোটিশ লোড করা যায়নি।";
+    return;
+  }
+
+  const {data:admin}=await db.rpc("is_admin");
+  const isAdmin=admin===true;
+
+  el.innerHTML="";
+
+  if(!data || data.length===0){
+    el.textContent="এখনো কোনো নোটিশ নেই।";
+    return;
+  }
+
+  data.forEach(n=>{
+    const item=document.createElement("div");
+    item.className="notice";
+
+    const title=document.createElement("strong");
+    title.textContent=n.title;
+
+    const description=document.createElement("p");
+    description.textContent=n.description;
+
+    item.append(title,description);
+
+    if(isAdmin){
+      const edit=document.createElement("button");
+      edit.className="secondary";
+      edit.textContent="✏️ এডিট";
+
+      edit.onclick=async()=>{
+        const title=prompt("নোটিশের শিরোনাম:",n.title);
+        if(title===null)return;
+
+        const description=prompt("নোটিশের বিস্তারিত:",n.description);
+        if(description===null)return;
+
+        const {error}=await db.from("notices")
+          .update({title,description})
+          .eq("id",n.id);
+
+        if(error){
+          alert("নোটিশ পরিবর্তন করা যায়নি।");
+        }else{
+          alert("নোটিশ আপডেট হয়েছে।");
+          loadNotices();
+        }
+      };
+
+      const del=document.createElement("button");
+      del.className="secondary";
+      del.textContent="🗑️ ডিলিট";
+
+      del.onclick=async()=>{
+        if(!confirm("আপনি কি এই নোটিশ মুছে ফেলতে চান?"))return;
+
+        const {error}=await db.from("notices")
+          .delete()
+          .eq("id",n.id);
+
+        if(error){
+          alert("নোটিশ মুছে ফেলা যায়নি।");
+        }else{
+          alert("নোটিশ মুছে ফেলা হয়েছে।");
+          loadNotices();
+        }
+      };
+
+      item.append(document.createElement("br"),edit,del);
+    }
+
+    el.appendChild(item);
+  });
+      }
 function showAdmin(){
   document.getElementById("adminPanel").classList.remove("hidden");
   document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
