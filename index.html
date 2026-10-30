@@ -72,6 +72,12 @@ footer{text-align:center;padding:20px;color:#778;font-size:12px}
   </div>
 
   <section class="section">
+    <input
+  type="text"
+  id="dealerSearch"
+  placeholder="ডিলারের নাম বা মোবাইল নম্বর দিয়ে খুঁজুন"
+  oninput="searchDealers()"
+>
     <h2 id="dealerTitle">সকল ডিলার পয়েন্ট</h2>
     <div id="dealerList">ডিলারের তথ্য লোড হচ্ছে...</div>
   </section>
@@ -182,21 +188,27 @@ function showCategory(category){
 }
 
 function renderDealers(){
-  const q=document.getElementById("search").value.trim().toLowerCase();
+  const q=document.getElementById("dealerSearch").value.trim().toLowerCase();
+
   const list=allDealers.filter(d=>{
     const matchesCategory=!selectedCategory||d.category===selectedCategory;
     const matchesSearch=(d.dealer_name+" "+d.phone).toLowerCase().includes(q);
     return matchesCategory&&matchesSearch;
   });
+
   const el=document.getElementById("dealerList");
-  if(!list.length){el.textContent="কোনো ডিলার পাওয়া যায়নি।";return;}
+
+  if(!list.length){
+    el.textContent="কোনো ডিলার পাওয়া যায়নি।";
+    return;
+  }
+
   el.innerHTML=list.map(d=>`
     <div class="dealer" onclick="showDetail(${d.id})">
       <strong>${escapeHTML(d.dealer_name)}</strong>
-      <small>${escapeHTML(d.phone)} · ${escapeHTML(d.category)}</small>
+      <small>${escapeHTML(d.phone)} · ${d.category==="Bread"?"ব্রেড পয়েন্ট":"বিস্কুট পয়েন্ট"}</small>
     </div>`).join("");
 }
-
 async function showDetail(id){
   const d=allDealers.find(x=>x.id===id);
   if(!d)return;
