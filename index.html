@@ -503,6 +503,23 @@ function showAdmin(){
   document.getElementById("adminPanel").classList.remove("hidden");
   document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
 }
+  async function adminLogin(){
+  const email=document.getElementById("adminEmail").value.trim();
+  const password=document.getElementById("adminPassword").value;
+  const msg=document.getElementById("adminMessage");
+
+  const {data,error}=await db.auth.signInWithPassword({
+    email:email,
+    password:password
+  });
+
+  if(error){
+    msg.textContent="লগইন ব্যর্থ: ইমেইল বা পাসওয়ার্ড ভুল।";
+    return;
+  }
+
+  msg.textContent="Admin লগইন সফল!";
+  }
 init();
 </script>
 </body>
