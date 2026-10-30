@@ -581,8 +581,13 @@ async function loadNotices(){
     return;
   }
 
-  const {data:admin}=await db.rpc("is_admin");
-  const isAdmin=admin===true;
+  const {data:sessionData}=await db.auth.getSession();
+let isAdmin=false;
+
+if(sessionData.session){
+  const {data:admin,error:adminError}=await db.rpc("is_admin");
+  isAdmin=!adminError && admin===true;
+}
 
   el.innerHTML="";
 
