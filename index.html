@@ -48,20 +48,30 @@ h1 {
 
 .search-area {
   margin: -22px 15px 22px;
-  background: white;
-  padding: 13px;
-  border-radius: 18px;
-  box-shadow: 0 7px 22px #00000015;
+  padding: 16px;
+  background: linear-gradient(135deg, #071f3d, #1675b9);
+  border-radius: 20px;
+  box-shadow: 0 8px 22px #123d3530;
 }
 
 .search-area input {
   width: 100%;
-  padding: 16px;
-  border: 0;
-  border-radius: 12px;
-  background: #f1f6f4;
-  font-size: 15px;
+  padding: 17px 18px;
+  border: 2px solid #d7eaff;
+  border-radius: 14px;
+  background: #ffffff;
+  color: #12344d;
+  font-size: 16px;
   outline: none;
+}
+
+.search-area input:focus {
+  border-color: #65c5ff;
+  box-shadow: 0 0 0 4px #65c5ff35;
+}
+
+.search-area input::placeholder {
+  color: #8295a5;
 }
 
 .container {
