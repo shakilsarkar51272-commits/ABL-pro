@@ -612,7 +612,7 @@ showDashboard();
   document.getElementById("adminPanel").classList.add("hidden");
   document.getElementById("adminDashboard").classList.remove("hidden");
   document.getElementById("adminDashboard").scrollIntoView({behavior:"smooth"});
-
+document.getElementById("noticeAdminForm").classList.remove("hidden");
   const {count:total}=await db.from("dealer_points").select("*",{count:"exact",head:true});
   const {count:bread}=await db.from("dealer_points").select("*",{count:"exact",head:true}).eq("category","Bread");
   const {count:biscuit}=await db.from("dealer_points").select("*",{count:"exact",head:true}).eq("category","Biscuit");
