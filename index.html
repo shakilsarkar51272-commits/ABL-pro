@@ -499,7 +499,10 @@ async function loadNotices(){
     <div class="notice"><strong>${escapeHTML(n.title)}</strong>
     <p>${escapeHTML(n.description)}</p></div>`).join(""):"এখনো কোনো নোটিশ নেই।";
 }
-
+function showAdmin(){
+  document.getElementById("adminPanel").classList.remove("hidden");
+  document.getElementById("adminPanel").scrollIntoView({behavior:"smooth"});
+}
 init();
 </script>
 </body>
