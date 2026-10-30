@@ -834,6 +834,26 @@ showDashboard();
     list.appendChild(item);
   });
         }
+  document.getElementById("noticeForm").addEventListener("submit",async function(e){
+  e.preventDefault();
+
+  const form=new FormData(this);
+  const title=form.get("title").trim();
+  const description=form.get("description").trim();
+  const msg=document.getElementById("noticeMessage");
+
+  const {error}=await db.from("notices").insert([
+    {title,description}
+  ]);
+
+  if(error){
+    msg.textContent="নোটিশ প্রকাশ করা যায়নি।";
+  }else{
+    msg.textContent="নোটিশ সফলভাবে প্রকাশ হয়েছে।";
+    this.reset();
+    loadNotices();
+  }
+});
 init();
 </script>
 </body>
