@@ -331,6 +331,19 @@ footer {
   </section>
 
   <footer>ABL pro · Created by Shakil Ahmed</footer>
+  <section class="section hidden" id="adminPanel">
+  <h2>🔐 Admin Login</h2>
+
+  <label>ইমেইল</label>
+  <input class="field" type="email" id="adminEmail" placeholder="Admin ইমেইল">
+
+  <label>পাসওয়ার্ড</label>
+  <input class="field" type="password" id="adminPassword" placeholder="পাসওয়ার্ড">
+
+  <button class="primary" onclick="adminLogin()">লগইন করুন</button>
+
+  <div id="adminMessage"></div>
+  </section>
 </main>
 
 <script>
