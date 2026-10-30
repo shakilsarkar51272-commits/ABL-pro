@@ -508,13 +508,26 @@ function showAdmin(){
   const password=document.getElementById("adminPassword").value;
   const msg=document.getElementById("adminMessage");
 
-  const {data,error}=await db.auth.signInWithPassword({
+  if(!db){
+    msg.textContent="ডেটাবেজ সংযোগ পাওয়া যায়নি।";
+    return;
+  }
+
+  const {error}=await db.auth.signInWithPassword({
     email:email,
     password:password
   });
 
   if(error){
-    msg.textContent="লগইন ব্যর্থ: ইমেইল বা পাসওয়ার্ড ভুল।";
+    msg.textContent="ইমেইল বা পাসওয়ার্ড ভুল।";
+    return;
+  }
+
+  const {data,isAdminError}=await db.rpc("is_admin");
+
+  if(isAdminError || data!==true){
+    await db.auth.signOut();
+    msg.textContent="আপনার Admin অনুমতি নেই।";
     return;
   }
 
