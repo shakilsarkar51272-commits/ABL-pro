@@ -8,7 +8,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ABL pro</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
 <style>
 * {
   box-sizing: border-box;
@@ -16,23 +15,23 @@
 
 body {
   margin: 0;
-  background: #f3f6f9;
-  color: #192b32;
+  background: #f1f5f4;
+  color: #20332d;
   font-family: Arial, "Noto Sans Bengali", sans-serif;
 }
 
 header {
-  background: linear-gradient(135deg, #103d34, #168568);
+  background: linear-gradient(135deg, #0b352b, #168568);
   color: white;
-  padding: 28px 18px 35px;
-  border-radius: 0 0 28px 28px;
+  padding: 30px 18px 38px;
+  border-radius: 0 0 30px 30px;
   text-align: center;
-  box-shadow: 0 5px 18px #123d3525;
+  box-shadow: 0 8px 24px #123d3525;
 }
 
 h1 {
-  font-size: 26px;
-  margin: 10px 0 7px;
+  font-size: 27px;
+  margin: 8px 0;
   font-weight: 800;
 }
 
@@ -43,24 +42,24 @@ h1 {
 
 .created {
   font-size: 12px;
-  margin-top: 13px;
+  margin-top: 14px;
   color: #d8f3e8;
 }
 
 .search-area {
-  margin: -20px 15px 20px;
+  margin: -22px 15px 22px;
   background: white;
-  padding: 12px;
-  border-radius: 17px;
-  box-shadow: 0 6px 22px #102e2420;
+  padding: 13px;
+  border-radius: 18px;
+  box-shadow: 0 7px 22px #00000015;
 }
 
 .search-area input {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border: 0;
   border-radius: 12px;
-  background: #f3f7f6;
+  background: #f1f6f4;
   font-size: 15px;
   outline: none;
 }
@@ -72,68 +71,68 @@ h1 {
 }
 
 .count {
-  background: linear-gradient(120deg, #ffffff, #e9f7f1);
-  padding: 19px;
-  border-radius: 18px;
-  box-shadow: 0 4px 15px #0000000b;
-  margin-bottom: 18px;
+  background: linear-gradient(120deg, #ffffff, #e2f5ec);
+  padding: 21px;
+  border-radius: 20px;
+  box-shadow: 0 5px 18px #0000000c;
+  margin-bottom: 20px;
 }
 
 .count small {
-  color: #657873;
+  color: #60766d;
 }
 
 .count strong {
   display: block;
-  font-size: 32px;
-  color: #12694f;
-  margin-top: 6px;
+  font-size: 35px;
+  color: #087653;
+  margin-top: 7px;
 }
 
 .menu {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 13px;
-  margin-bottom: 20px;
+  gap: 14px;
+  margin-bottom: 22px;
 }
 
 .menu button {
   border: 0;
-  border-radius: 18px;
-  padding: 22px 10px;
+  border-radius: 19px;
+  padding: 24px 10px;
   font-size: 17px;
   font-weight: bold;
   cursor: pointer;
-  box-shadow: 0 4px 12px #0000000b;
+  box-shadow: 0 5px 14px #00000010;
   transition: 0.2s;
 }
 
 .menu button:active {
-  transform: scale(0.97);
+  transform: scale(0.96);
 }
 
 .bread {
-  background: linear-gradient(135deg, #e5f0ff, #cfe2ff);
-  color: #20558d;
+  background: linear-gradient(135deg, #e2efff, #c5dcff);
+  color: #174f91;
 }
 
 .biscuit {
-  background: linear-gradient(135deg, #fff1df, #ffdfbd);
-  color: #96501c;
+  background: linear-gradient(135deg, #fff0dc, #ffd9ad);
+  color: #985018;
 }
 
 .section {
   background: white;
-  border-radius: 18px;
-  padding: 18px;
-  margin: 15px 0;
-  box-shadow: 0 4px 16px #0000000b;
+  border-radius: 20px;
+  padding: 19px;
+  margin: 16px 0;
+  box-shadow: 0 5px 18px #0000000c;
 }
 
 .section h2 {
   font-size: 19px;
-  margin: 0 0 15px;
-  color: #173d32;
+  margin: 0 0 16px;
+  color: #174536;
 }
 
 input, select, textarea {
@@ -143,24 +142,24 @@ input, select, textarea {
 .field {
   width: 100%;
   padding: 14px;
-  border: 1px solid #dce7e2;
-  border-radius: 11px;
-  margin: 7px 0 13px;
-  background: #fbfdfc;
+  border: 1px solid #dce8e2;
+  border-radius: 12px;
+  margin: 7px 0 14px;
+  background: #fafffc;
   outline: none;
 }
 
 .field:focus {
   border-color: #168568;
-  box-shadow: 0 0 0 3px #16856818;
+  box-shadow: 0 0 0 3px #16856820;
 }
 
 .primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   border: 0;
-  border-radius: 12px;
-  background: linear-gradient(120deg, #12694f, #168568);
+  border-radius: 13px;
+  background: linear-gradient(120deg, #0d684c, #168568);
   color: white;
   font-weight: bold;
   font-size: 16px;
@@ -168,34 +167,34 @@ input, select, textarea {
 }
 
 .secondary {
-  padding: 11px 15px;
+  padding: 12px 16px;
   border: 0;
-  border-radius: 11px;
-  background: #e8f5ef;
-  color: #17654f;
+  border-radius: 12px;
+  background: #e4f3eb;
+  color: #12654b;
   font-weight: bold;
   cursor: pointer;
 }
 
 .dealer {
-  padding: 16px;
+  padding: 17px;
   background: #fbfdfc;
-  border: 1px solid #e5eeea;
-  border-radius: 14px;
-  margin: 11px 0;
+  border: 1px solid #e3eee8;
+  border-radius: 15px;
+  margin: 12px 0;
   cursor: pointer;
-  box-shadow: 0 2px 8px #00000008;
+  box-shadow: 0 3px 10px #00000008;
 }
 
 .dealer strong {
   display: block;
   font-size: 16px;
-  color: #183e32;
-  margin-bottom: 6px;
+  color: #174536;
+  margin-bottom: 7px;
 }
 
 .dealer small {
-  color: #687a74;
+  color: #687d73;
   font-size: 13px;
 }
 
@@ -205,24 +204,24 @@ input, select, textarea {
 
 .tag {
   font-size: 11px;
-  padding: 5px 9px;
+  padding: 5px 10px;
   border-radius: 20px;
-  background: #e6f2ed;
-  color: #17654f;
+  background: #e3f4eb;
+  color: #12654b;
 }
 
 .notice {
-  background: #fff8e8;
-  padding: 14px;
-  border-radius: 12px;
-  margin: 9px 0;
-  border-left: 4px solid #f1b74c;
+  background: #fff8e9;
+  padding: 15px;
+  border-radius: 13px;
+  margin: 10px 0;
+  border-left: 4px solid #edb64d;
 }
 
 footer {
   text-align: center;
-  padding: 22px;
-  color: #778780;
+  padding: 24px;
+  color: #75877e;
   font-size: 12px;
 }
 
