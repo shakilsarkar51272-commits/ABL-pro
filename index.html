@@ -734,18 +734,93 @@ showDashboard();
     return;
   }
 
+  const {data:admin}=await db.rpc("is_admin");
+  const isAdmin=admin===true;
+
   list.innerHTML="";
+
+  if(!data || data.length===0){
+    list.textContent="এখনো কোনো TSM তথ্য যোগ করা হয়নি।";
+    return;
+  }
 
   data.forEach(tsm=>{
     const item=document.createElement("div");
     item.className="dealer";
-    item.innerHTML="<strong>"+tsm.tsm_name+"</strong><br>"+tsm.phone+
-      "<br>জেলা: "+(tsm.district||"")+
-      "<br>এলাকা: "+(tsm.area||"")+
-      "<br>ঠিকানা: "+(tsm.address||"");
+
+    const name=document.createElement("strong");
+    name.textContent=tsm.tsm_name;
+
+    const phone=document.createElement("a");
+    phone.textContent=tsm.phone;
+    phone.href="tel:"+tsm.phone.replace(/[^\d+]/g,"");
+
+    item.append(name,document.createElement("br"),phone);
+
+    ["district","area","address"].forEach((field,index)=>{
+      const label=["জেলা: ","এলাকা: ","ঠিকানা: "][index];
+      const line=document.createElement("div");
+      line.textContent=label+(tsm[field]||"");
+      item.appendChild(line);
+    });
+
+    if(isAdmin){
+      const edit=document.createElement("button");
+      edit.className="secondary";
+      edit.textContent="✏️ এডিট";
+
+      edit.onclick=async()=>{
+        const tsm_name=prompt("TSM স্যারের নাম:",tsm.tsm_name);
+        if(tsm_name===null)return;
+
+        const phone=prompt("মোবাইল নম্বর:",tsm.phone);
+        if(phone===null)return;
+
+        const district=prompt("জেলা:",tsm.district||"");
+        if(district===null)return;
+
+        const area=prompt("এলাকা:",tsm.area||"");
+        if(area===null)return;
+
+        const address=prompt("সম্পূর্ণ ঠিকানা:",tsm.address||"");
+        if(address===null)return;
+
+        const {error}=await db.from("tsm_contacts")
+          .update({tsm_name,phone,district,area,address})
+          .eq("id",tsm.id);
+
+        if(error){
+          alert("তথ্য পরিবর্তন করা যায়নি।");
+        }else{
+          alert("TSM-এর তথ্য আপডেট হয়েছে।");
+          renderTsmList();
+        }
+      };
+
+      const del=document.createElement("button");
+      del.className="secondary";
+      del.textContent="🗑️ ডিলিট";
+
+      del.onclick=async()=>{
+        if(!confirm("আপনি কি এই TSM-এর তথ্য মুছে ফেলতে চান?"))return;
+
+        const {error}=await db.from("tsm_contacts")
+          .delete().eq("id",tsm.id);
+
+        if(error){
+          alert("তথ্য মুছে ফেলা যায়নি।");
+        }else{
+          alert("TSM-এর তথ্য মুছে ফেলা হয়েছে।");
+          renderTsmList();
+        }
+      };
+
+      item.append(document.createElement("br"),edit,del);
+    }
+
     list.appendChild(item);
   });
-  }
+        }
 init();
 </script>
 </body>
