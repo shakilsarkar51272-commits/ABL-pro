@@ -408,7 +408,8 @@ footer {
 
       <label>মোবাইল নম্বর</label>
       <input class="field" name="phone" required placeholder="মোবাইল নম্বর">
-
+<label>বিকল্প মোবাইল নম্বর</label>
+<input class="field" name="alternate_phone" placeholder="বিকল্প মোবাইল নম্বর">
       <label>জেলা</label>
       <input class="field" name="district" placeholder="জেলার নাম">
 
@@ -532,6 +533,7 @@ document.getElementById("dealerForm").addEventListener("submit",async e=>{
   const record={
     dealer_name:f.get("dealer_name").trim(),
     phone:f.get("phone").trim(),
+    alternate_phone:f.get("alternate_phone").trim(),
     category:f.get("category"),
     district:f.get("district").trim(),
     area:f.get("area").trim(),
