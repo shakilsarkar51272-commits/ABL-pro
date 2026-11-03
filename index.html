@@ -650,8 +650,10 @@ document.getElementById("dealerForm").addEventListener("submit",async e=>{
     map_url:f.get("map_url").trim()
   };
   const {data,error}=await db.from("dealer_points").insert(record).select().single();
-  if(error){message.textContent="তথ্য জমা হয়নি: "+error.message;return;}
-
+  if(error){
+  showToast("তথ্য জমা হয়নি: "+error.message, "error");
+  return;
+}
   const files=document.getElementById("photos").files;
   for(const file of files){
     const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
