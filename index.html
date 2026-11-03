@@ -668,7 +668,7 @@ document.getElementById("dealerForm").addEventListener("submit",async e=>{
       dealer_id:data.id,image_url:urlData.publicUrl
     });
   }
-  message.textContent="ডিলার পয়েন্ট সফলভাবে যোগ হয়েছে!";
+  showToast("ডিলার পয়েন্ট সফলভাবে যোগ হয়েছে!", "success");
   form.reset();
   await loadDealers();
 });
