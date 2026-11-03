@@ -638,7 +638,7 @@ document.getElementById("dealerForm").addEventListener("submit",async e=>{
   const form=e.target;
   const f=new FormData(form);
   const message=document.getElementById("message");
-  message.textContent="তথ্য জমা হচ্ছে...";
+  showToast("তথ্য জমা হচ্ছে...", "success");
   const record={
     dealer_name:f.get("dealer_name").trim(),
     phone:f.get("phone").trim(),
