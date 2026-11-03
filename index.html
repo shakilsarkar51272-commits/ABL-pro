@@ -589,6 +589,49 @@ async function showDetail(id){
   box.hidden=false;
   box.scrollIntoView({behavior:"smooth"});
 }
+  function showToast(text, type = "success") {
+  let toast = document.getElementById("goldToast");
+
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.id = "goldToast";
+    document.body.appendChild(toast);
+  }
+
+  toast.textContent = text;
+
+  toast.style.cssText = `
+    position: fixed;
+    top: 15px;
+    left: 50%;
+    transform: translate(-50%, -130%);
+    width: calc(100% - 30px);
+    max-width: 420px;
+    padding: 16px 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #fff3c4, #d6a642);
+    color: #513900;
+    font-weight: 600;
+    font-size: 14px;
+    text-align: center;
+    box-shadow: 0 5px 22px rgba(0,0,0,.22);
+    z-index: 99999;
+    opacity: 0;
+    transition: all .45s ease;
+  `;
+
+  requestAnimationFrame(() => {
+    toast.style.transform = "translate(-50%, 0)";
+    toast.style.opacity = "1";
+  });
+
+  clearTimeout(window.goldToastTimer);
+
+  window.goldToastTimer = setTimeout(() => {
+    toast.style.transform = "translate(-50%, -130%)";
+    toast.style.opacity = "0";
+  }, 3500);
+  }
 document.getElementById("dealerForm").addEventListener("submit",async e=>{
   e.preventDefault();
   if(!db){alert("আগে Supabase সংযোগ সেট করতে হবে।");return;}
