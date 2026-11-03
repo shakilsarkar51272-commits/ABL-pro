@@ -659,7 +659,10 @@ document.getElementById("dealerForm").addEventListener("submit",async e=>{
     const safeName=file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
     const path=data.id+"/"+Date.now()+"_"+safeName;
     const {error:uploadError}=await db.storage.from("dealer-photos").upload(path,file);
-    if(uploadError){message.textContent="ডিলার যোগ হয়েছে, তবে একটি ছবি আপলোড হয়নি: "+uploadError.message;continue;}
+    if(uploadError){
+  showToast("ডিলার যোগ হয়েছে, তবে একটি ছবি আপলোড হয়নি: "+uploadError.message, "error");
+  continue;
+}
     const {data:urlData}=db.storage.from("dealer-photos").getPublicUrl(path);
     await db.from("dealer_images").insert({
       dealer_id:data.id,image_url:urlData.publicUrl
