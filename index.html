@@ -1112,6 +1112,17 @@ if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./service-worker.js");
   });
 }
+    function openDealerFormSheet() {
+  document.getElementById("dealerFormSheet").classList.add("active");
+  document.getElementById("dealerSheetOverlay").classList.add("active");
+  document.body.style.overflow = "hidden";
+}
+
+function closeDealerFormSheet() {
+  document.getElementById("dealerFormSheet").classList.remove("active");
+  document.getElementById("dealerSheetOverlay").classList.remove("active");
+  document.body.style.overflow = "";
+}
   </script>
   <footer style="
   background:#071f3d;
@@ -1132,7 +1143,6 @@ if ("serviceWorker" in navigator) {
     © 2026 ABL pro. All Rights Reserved.
   </p>
   </footer>
-    </footer>
 
   <div id="dealerSheetOverlay" onclick="closeDealerFormSheet()"></div>
 </body>
