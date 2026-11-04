@@ -335,7 +335,10 @@ footer {
   </section>
 
   <section class="section" id="dealerFormSheet">
-    <h2>➕ নতুন ডিলার পয়েন্ট যোগ করুন</h2>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+  <h2 style="margin:0;">➕ নতুন ডিলার পয়েন্ট যোগ করুন</h2>
+  <button type="button" onclick="closeDealerFormSheet()" style="border:0; background:#071f3d; color:white; border-radius:50%; width:34px; height:34px; font-size:22px;">×</button>
+</div>
     <form id="dealerForm">
       <label>ডিলারের নাম</label>
       <input class="field" name="dealer_name" required placeholder="ডিলারের নাম">
